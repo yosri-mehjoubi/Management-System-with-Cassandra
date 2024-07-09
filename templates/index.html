@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Images</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+
+</head>
+
+    <!-- Section de titre avec votre nom -->
+    <header>
+        <h1>Welcome to  User Management System</h1>
+        <h2>By       Yosri Mehjoubi         </h2>
+
+    </header>
+
+<body>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        <label for="age">Age:</label><br>
+        <input type="text" id="age" name="age" required><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br>
+        <label for="file">Image:</label><br>
+        <input type="file" id="file" name="file"><br><br>
+        <input type="submit" value="Add User">
+    </form>
+
+    <h1>All Users</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Image</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.user_id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.age }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% if user.image_data %}
+                        <img src="data:image/jpeg;base64,{{ user.image_data }}" alt="User Image" width="100">
+                    {% else %}
+                        No image
+                    {% endif %}
+                </td>
+                <td>
+                    <form action="/delete_user/{{ user.user_id }}" method="post">
+                        <input type="submit" value="Delete" class="delete-button" >
+                    </form>
+                </td>
+                 <td>
+                    
+                    <form action="/update_user/{{ user.user_id }}" method="post" enctype="multipart/form-data">
+                        <input type="text" name="name" value="{{ user.name }}" required>
+                        <input type="text" name="age" value="{{ user.age }}" required>
+                        <input type="email" name="email" value="{{ user.email }}" required>
+                        <input type="file" name="file">
+                        <input type="submit" value="Update">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Formulaire de recherche d'utilisateur -->
+    <h2>Search User</h2>
+    <form action="/search_user" method="get">
+        <input type="text" name="q" placeholder="Enter name to search">
+        <input type="submit" value="Search">
+    </form>
+
+    <!-- Tableau de résultats de la recherche -->
+    <h2>Search Results</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in search_results %}
+            <tr>
+                <td>{{ user.user_id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.age }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% if user.image_data %}
+                        <img src="data:image/jpeg;base64,{{ user.image_data }}" alt="User Image" width="100">
+                    {% else %}
+                        No image
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

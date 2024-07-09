@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Images</title>
+</head>
+<body>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        <label for="age">Age:</label><br>
+        <input type="text" id="age" name="age" required><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br>
+        <label for="file">Image:</label><br>
+        <input type="file" id="file" name="file"><br><br>
+        <input type="submit" value="Add User">
+    </form>
+
+    <h1>User</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.user_id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.age }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% if user.image_data %}
+                        <img src="data:image/jpeg;base64,{{ user.image_data }}" alt="User Image" width="100">
+                    {% else %}
+                        No image
+                    {% endif %}
+                </td>
+                <td>
+                    <form action="/delete_user/{{ user.user_id }}" method="post">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- Ajouter un formulaire de recherche -->
+<h2>Search User</h2>
+<form action="/search_user" method="get">
+    <input type="text" name="q" placeholder="Enter name to search">
+    <input type="submit" value="Search">
+</form>
+
+</body>
+</html>
